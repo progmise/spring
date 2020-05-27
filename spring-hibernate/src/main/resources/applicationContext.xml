@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="poolName" value="springHikariCP" />
+        <property name="connectionTestQuery" value="SELECT 1" />
+        <property name="dataSourceClassName" value="com.mysql.cj.jdbc.MysqlDataSource" />
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="url">jdbc:mysql://localhost:3306/db_pokemons</prop>
+                <prop key="user">root</prop>
+                <prop key="password"></prop>
+                
+                <prop key="cachePrepStmts">true</prop>
+                <prop key="prepStmtCacheSize">250</prop>
+                <prop key="prepStmtCacheSqlLimit">2048</prop>
+                <prop key="useServerPrepStmts">true</prop>
+                
+                <prop key="useLocalSessionState">true</prop>
+                <prop key="rewriteBatchedStatements">true</prop>
+                <prop key="cacheResultSetMetadata">true</prop>
+                <prop key="cacheServerConfiguration">true</prop>
+                <prop key="elideSetAutoCommits">true</prop>
+                <prop key="maintainTimeStats">false</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig" />
+    </bean>       
+
+    <!-- Hibernate 5 Local SessionFactory Bean definition-->
+    <bean id="hibernate5LocalSessionFactoryBean" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>com.certant.pokedexlite.model.Pokemon</value>
+                <value>com.certant.pokedexlite.model.Type</value>
+                <value>com.certant.pokedexlite.model.Ability</value>
+                <value>com.certant.pokedexlite.model.Evolution</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.event.merge.entity_copy_observer">allow</prop>
+            </props>
+        </property>
+    </bean>
+	
+    <bean id="pokemonDAO" class="com.certant.pokedexlite.dao.PokemonDAOImpl">
+        <property name="sessionFactory" ref="hibernate5LocalSessionFactoryBean" />
+    </bean>
+    
+    <bean id="typeDAO" class="com.certant.pokedexlite.dao.TypeDAOImpl">
+        <property name="sessionFactory" ref="hibernate5LocalSessionFactoryBean" />
+    </bean>
+    
+    <bean id="abilityDAO" class="com.certant.pokedexlite.dao.AbilityDAOImpl">
+        <property name="sessionFactory" ref="hibernate5LocalSessionFactoryBean" />
+    </bean>
+    
+    <bean id="evolutionDAO" class="com.certant.pokedexlite.dao.EvolutionDAOImpl">
+        <property name="sessionFactory" ref="hibernate5LocalSessionFactoryBean" />
+    </bean>
+    
+    <bean id="pokemonController" class="com.certant.pokedexlite.controller.PokemonController">
+        <property name="pokemonDAO" ref="pokemonDAO" />
+    </bean>
+</beans>
