@@ -19,7 +19,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <spring-framework.version>5.2.5.RELEASE</spring-framework.version>
-        <hibernate-framework.version>5.4.14.Final</hibernate-framework.version>  
+        <hibernate-framework.version>5.4.24.Final</hibernate-framework.version>  
         <slf4j.version>1.7.30</slf4j.version>     
         <logback.version>1.2.3</logback.version>   
         <loj4j.version>1.2.17</loj4j.version>
