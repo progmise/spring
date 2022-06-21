@@ -23,7 +23,7 @@
         <slf4j.version>1.7.30</slf4j.version>     
         <logback.version>1.2.3</logback.version>   
         <loj4j.version>1.2.17</loj4j.version>
-        <mysql-connector.version>8.0.19</mysql-connector.version>
+        <mysql-connector.version>8.0.28</mysql-connector.version>
         <hikaricp.version>3.4.2</hikaricp.version>
         <junit.version>4.11</junit.version>
     </properties>
